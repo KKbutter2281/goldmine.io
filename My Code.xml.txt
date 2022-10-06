@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Gold Miner</title>
+    <meta charset="utf-8" />
+	<style>
+body {
+  background: gold;
+}
+.button:active {
+  background: black;
+  border: 5px double orange;
+  font-size: 250%;
+  border-radius: 10px;
+  color: orange;
+  text-shadow: 2px 2px red;
+}
+.button {
+  background: gold;
+  border: 5px double orange;
+  font-size: 250%;
+  border-radius: 10px;
+  color: orange;
+  text-shadow: 2px 2px red;
+}
+.test:active {
+  background: black;
+  border: 5px double orange;
+  font-size: 250%;
+  border-radius: 10px;
+  color: orange;
+  text-shadow: 2px 2px red;
+}
+.test {
+  background: gold;
+  border: 5px double orange;
+  font-size: 250%;
+  border-radius: 10px;
+  color: orange;
+  text-shadow: 2px 2px red;
+}
+	</style>
+  </head>
+  <body>
+
+    <p id="goldMined">0 Gold Mined</p>
+    <button onclick="mineGold()" class="button">Mine Gold</button>
+    <button onclick="buyGoldPerClick()" class="test">Upgrade Pickaxe</button>
+    <button onclick="reset()" class="button">Reset Code</button>
+    <script>
+	var gameData = {
+     gold: 0, 
+     goldPerClick: 1,
+     goldPerClickCost: 10 
+    }
+    
+    if (localStorage.getItem("clickCounter") !== null) {
+       gameData.gold = parseInt(localStorage.getItem("clickCounter")/10);
+    }
+ if (localStorage.getItem("pickLevel") !== null) {
+       gameData.goldPerClick = parseInt(localStorage.getItem("pickLevel")/10);
+    }
+ if (localStorage.getItem("pickCost") !== null) {
+       gameData.goldPerClick = parseInt(localStorage.getItem("pickCost"));
+    }
+    
+    function mineGold() {
+     	 gameData.gold += gameData.goldPerClick; //add to the gold count
+localStorage.setItem("clickCounter", gameData.gold);
+localStorage.setItem("pickLevel", gameData.goldPerClick);    
+localStorage.setItem("pickCost", gameData.goldPerClickCost); 
+      	 document.getElementById("goldMined").innerHTML = gameData.gold + " Sushi Eaten";
+    }
+ 
+ var pickaxes = 1
+ 
+ function reset() {
+     gameData.gold = 0 
+     gameData.goldPerClick = 1
+     gameData.goldPerClickCost = 10
+     localStorage.setItem("clickCounter", 0);
+localStorage.setItem("pickLevel", 0);    
+localStorage.setItem("pickCost", 0); 
+    }
+    
+    function buyGoldPerClick() {
+      //check to make sure player has enough gold to buy upgrade
+      if (gameData.gold >= gameData.goldPerClickCost) {
+        gameData.gold -= gameData.goldPerClickCost; //deduct gold for purchase
+	    gameData.goldPerClick += 1; //add one to the pickaxe level
+	    gameData.goldPerClickCost += 10; //double the cost for the next pickaxe upgrade
+	    document.getElementById("goldMined").innerHTML = gameData.gold + " Gold Mined"
+      }
+    }
+    var time = 1000
+    setInterval(function() {
+      mineGold();
+      console.log(time);
+      console.log(gameData);
+    },time);
+      
+    </script>
+  </body>
+</html>
